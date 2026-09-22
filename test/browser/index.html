@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>VanillaMVC browser tests</title>
+    <style>
+      body { font: 14px system-ui, sans-serif; margin: 1.5rem; }
+      li { list-style: none; } li.fail { color: #d70015; } li.skip { color: #6e6e73; }
+      #fixtures { position: absolute; left: -9999px; }
+    </style>
+  </head>
+  <body>
+    <h1>Browser tests</h1>
+    <p id="summary">Running…</p>
+    <ul id="results"></ul>
+    <div id="fixtures"></div>
+    <script type="module">
+      import { run, skip, test } from './harness.js';
+      await import('./fields.test.js');
+      await import('./templates.test.js');
+      await import('./css.test.js');
+      await import('./router.test.js');
+      await import('./components.test.js');
+      // The engines' browser tests, run when their files exist: a missing file is
+      // skipped by name (the server answers 404); any other import error is a failure.
+      for (const engine of ['theme', 'layout', 'responsive', 'animation', 'effects', 'semantics']) {
+        const file = `./css-${engine}.test.js`;
+        try {
+          if ((await fetch(file, { method: 'HEAD' })).status === 404) {
+            skip(file, 'not on disk');
+            continue;
+          }
+          await import(file);
+        } catch (error) {
+          test(`${file} imports`, () => {
+            throw error;
+          });
+        }
+      }
+      await run();
+    </script>
+  </body>
+</html>

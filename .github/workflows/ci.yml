@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Node ${{ matrix.node }}
+    # Pinned: ubuntu-latest becomes Ubuntu 26 on 2026-10-19, and a runner change should be a commit.
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [22, 24]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      # The runner ships Google Chrome; the harness finds it on PATH and runs it unsandboxed under CI.
+      - run: npm test
+      - name: The package contains what it should
+        run: npm pack --dry-run

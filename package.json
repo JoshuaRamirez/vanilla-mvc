@@ -1,0 +1,98 @@
+{
+  "name": "vanilla-mvc",
+  "version": "0.7.0",
+  "description": "An SPA framework made of MVC and three verbs: create, interconnect, activate.",
+  "keywords": [
+    "mvc",
+    "spa",
+    "framework",
+    "no-dependencies",
+    "event-bus",
+    "templates",
+    "router",
+    "css-in-js",
+    "architecture",
+    "ai-agents"
+  ],
+  "license": "MIT",
+  "author": "Joshua Ramirez",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JoshuaRamirez/VanillaMVC.git"
+  },
+  "homepage": "https://github.com/JoshuaRamirez/VanillaMVC#readme",
+  "bugs": {
+    "url": "https://github.com/JoshuaRamirez/VanillaMVC/issues"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "bin": {
+    "vanilla-mvc": "./bin/vanilla-mvc.mjs"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/framework/index.d.ts",
+      "default": "./dist/framework/index.js"
+    },
+    "./css": {
+      "types": "./dist/libraries/css/index.d.ts",
+      "default": "./dist/libraries/css/index.js"
+    },
+    "./fields": {
+      "types": "./dist/libraries/fields/index.d.ts",
+      "default": "./dist/libraries/fields/index.js"
+    },
+    "./router": {
+      "types": "./dist/libraries/router/index.d.ts",
+      "default": "./dist/libraries/router/index.js"
+    },
+    "./templates": {
+      "types": "./dist/libraries/templates/index.d.ts",
+      "default": "./dist/libraries/templates/index.js"
+    },
+    "./testing": "./testing/index.mjs",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json",
+    "./architecture": "./architecture/rules.mjs"
+  },
+  "files": [
+    "architecture",
+    "bin",
+    "dist/framework",
+    "dist/libraries",
+    "src/framework",
+    "src/libraries",
+    "testing",
+    "README.md",
+    "RULES.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "start": "npm run build && node server.mjs",
+    "test": "npm run build && tsc -p tsconfig.checks.json && node --test --test-concurrency=5 test/*.test.mjs",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.checks.json",
+    "surface": "node scripts/surface.mjs",
+    "prepack": "npm run build",
+    "rules:md": "node -e \"import('./architecture/guide.mjs').then(m => require('node:fs').writeFileSync('RULES.md', m.rulesMarkdown()))\"",
+    "test:consumer": "CONSUMER=${CONSUMER:?set CONSUMER to the root of an application built on this framework} node --test test/seams.test.mjs",
+    "prepare": "npm run build"
+  },
+  "peerDependencies": {
+    "typescript5": "npm:typescript@~5.9.3"
+  },
+  "peerDependenciesMeta": {
+    "typescript5": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.3",
+    "typescript": "^7.0.2",
+    "typescript5": "npm:typescript@~5.9.3"
+  }
+}
