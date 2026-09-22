@@ -11,10 +11,15 @@ no compiler, and no runtime dependencies: templates, styles, form values, and ro
 
 ```sh
 mkdir notes-app && cd notes-app
-npm install vanilla-mvc
+npm install github:JoshuaRamirez/vanilla-mvc
 npx vanilla-mvc init
 npm install && npm run theme:css && npm start          # http://localhost:4500
 ```
+
+**Not on npm yet.** The name `vanilla-mvc` there belongs to an unrelated package, so install from
+GitHub; the dependency your application records is whatever spec you installed with. The package
+builds itself on install (`prepare`), so if your npm holds install scripts for approval, allow it:
+`npm approve-scripts vanilla-mvc`.
 
 Needs Node 22 or later. The browser tests need Chrome or Chromium, found on macOS, Linux and
 Windows, or wherever `$CHROME` points. Installing from a private registry instead:
@@ -505,9 +510,9 @@ rules). Node resolves them through `node_modules`. A browser cannot resolve a ba
 `index.html` that `init` writes carries an import map pointing at `/vendor`, and `vanilla-mvc vendor`
 copies the compiled framework there on every build.
 
-`npm update` will not cross a `0.x` minor: npm reads `^0.3.1` as `>=0.3.1 <0.4.0`, so a `0.4.0`
-needs `npm install vanilla-mvc@latest`. While the version starts with 0, every minor may break;
-[CHANGELOG.md](CHANGELOG.md) says how.
+Take a newer framework with `npm install github:JoshuaRamirez/vanilla-mvc` again — a git dependency
+is not versioned, so `npm update` will not move it. While the version starts with 0, every minor
+may break; [CHANGELOG.md](CHANGELOG.md) says how.
 
 ## Checking the framework against an application
 

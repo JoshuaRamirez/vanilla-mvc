@@ -5,6 +5,8 @@ break things; each one below says what, and what to do.
 
 ## Unreleased
 
+- **Public, on GitHub.** Install with `npm install github:JoshuaRamirez/vanilla-mvc`; the package
+  builds itself on install. It is not on npm: that name belongs to an unrelated package.
 - **Public release preparation.** MIT licence; nothing in the package assumes a particular machine.
   `init` writes an `.npmrc` only when given `--registry <url>`.
 - The test harness finds Chrome or Chromium on Linux and Windows as well as macOS, and runs it

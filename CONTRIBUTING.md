@@ -51,11 +51,14 @@ version 2.1 — see [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
 ## Releasing (maintainers)
 
+The package is not on npm — that name is an unrelated package — so a release is a tag:
+
 ```sh
 npm version <patch|minor|major>   # move CHANGELOG's Unreleased under the new version first
-npm publish                       # prepack builds; the tarball is dist/, src/, bin/, architecture/, testing/
 git push --follow-tags
 ```
+
+Applications install from GitHub, and `prepare` builds the package on install.
 
 To try a release in an application before publishing it, publish to a local registry such as
 Verdaccio with `npm publish --registry http://localhost:4873`, and give the application
