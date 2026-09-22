@@ -60,6 +60,18 @@ git push --follow-tags
 
 Applications install from GitHub, and `prepare` builds the package on install.
 
+This repository is the public one. It was exported from a private repository where the framework
+grew alongside the application it was written against, so its history starts at the first public
+commit. The maintainer publishes from that working copy with a worktree on the `public-main`
+branch:
+
+```sh
+git archive HEAD | tar -x -C "$WORK"          # today's tracked tree
+git worktree add /tmp/pub public-main
+rm -rf /tmp/pub/* && cp -R "$WORK"/. /tmp/pub/
+cd /tmp/pub && git add -A && git commit && git push public public-main:main
+```
+
 To try a release in an application before publishing it, publish to a local registry such as
 Verdaccio with `npm publish --registry http://localhost:4873`, and give the application
 `npx vanilla-mvc init --registry http://localhost:4873`.
