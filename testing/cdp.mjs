@@ -50,7 +50,9 @@ export const DEFAULT_CHROME = (() => {
   return list[0];
 })();
 
-const LAUNCH_TIMEOUT = 15_000;
+// CI machines are slow and several suites launch Chrome at once, so it gets longer there. Chrome
+// printing nothing in 15 s on a loaded runner is not a broken browser; it is a browser still starting.
+const LAUNCH_TIMEOUT = process.env.CI ? 60_000 : 15_000;
 const EXIT_TIMEOUT = 5_000;
 
 /**
@@ -223,7 +225,11 @@ export async function launch({ chrome, headless = true } = {}) {
     '--no-default-browser-check',
     // Linux CI runners (Ubuntu 23.10 and later) forbid the unprivileged user namespaces Chrome's
     // sandbox needs, and root cannot sandbox at all. The page is our own test, not the web.
-    ...(process.platform === 'linux' && (process.env.CI || process.getuid?.() === 0) ? ['--no-sandbox'] : []),
+    // /dev/shm is small in containers, and there is no GPU: with neither flag Chrome starts and
+    // then sits there, which arrives as "printed no DevTools URL" rather than as a crash.
+    ...(process.platform === 'linux' && (process.env.CI || process.getuid?.() === 0)
+      ? ['--no-sandbox', '--disable-dev-shm-usage', '--disable-gpu']
+      : []),
     'about:blank',
   ];
   const child = spawn(binary, args, { stdio: ['ignore', 'ignore', 'pipe'] });
